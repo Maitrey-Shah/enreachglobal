@@ -1,0 +1,81 @@
+
+> enreach-global@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.3 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.29.38:3000
+✓ Ready in 1727ms
+
+○ Compiling / ...
+ GET / 200 in 12.1s (next.js: 11.6s, application-code: 578ms)
+[browser] Image with src "/logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+ GET / 200 in 191ms (next.js: 13ms, application-code: 178ms)
+[browser] Image with src "/logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[browser] Image with src "/enreachlogo-transparent.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+ POST /api/contact 500 in 2.1s (next.js: 2.1s, application-code: 61ms)
+ GET / 200 in 662ms (next.js: 183ms, application-code: 479ms)
+ GET / 200 in 180ms (next.js: 14ms, application-code: 166ms)
+[browser] Image with src "/logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[browser] Image with src "/enreachlogo-transparent.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+ GET / 200 in 2.0s (next.js: 102ms, application-code: 1925ms)
+[browser] Image with src "/logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[browser] Image with src "/enreachlogo-transparent.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+ POST /api/contact 500 in 103ms (next.js: 41ms, application-code: 62ms)
+  Reload env: .env.local
+✓ Compiled in 1360ms
+ GET / 200 in 3.0s (next.js: 1535ms, application-code: 1507ms)
+ GET / 200 in 1010ms (next.js: 564ms, application-code: 445ms)
+  Reload env: .env.local
+ GET / 200 in 372ms (next.js: 249ms, application-code: 123ms)
+  Reload env: .env.local
+ GET / 200 in 418ms (next.js: 226ms, application-code: 192ms)
+  Reload env: .env.local
+ GET / 200 in 466ms (next.js: 251ms, application-code: 214ms)
+  Reload env: .env.local
+ GET / 200 in 362ms (next.js: 213ms, application-code: 148ms)
+ GET / 200 in 1423ms (next.js: 49ms, application-code: 1374ms)
+[browser] Image with src "/logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[browser] Image with src "/enreachlogo-transparent.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+ POST /api/contact 500 in 1569ms (next.js: 287ms, application-code: 1282ms)
+  Reload env: .env.local
+✓ Compiled in 662ms
+ GET / 200 in 2.2s (next.js: 849ms, application-code: 1367ms)
+ GET / 200 in 2.3s (next.js: 1031ms, application-code: 1235ms)
+ GET / 200 in 1016ms (next.js: 548ms, application-code: 469ms)
+ GET / 200 in 999ms (next.js: 811ms, application-code: 188ms)
+  Reload env: .env.local
+ GET / 200 in 413ms (next.js: 228ms, application-code: 184ms)
+ GET / 200 in 90ms (next.js: 13ms, application-code: 78ms)
+  Reload env: .env.local
+ GET / 200 in 754ms (next.js: 304ms, application-code: 450ms)
+ GET / 200 in 757ms (next.js: 519ms, application-code: 237ms)
+  Reload env: .env.local
+ GET / 200 in 511ms (next.js: 200ms, application-code: 311ms)
+ GET / 200 in 199ms (next.js: 22ms, application-code: 176ms)
+  Reload env: .env.local
+ GET / 200 in 315ms (next.js: 206ms, application-code: 108ms)
+  Reload env: .env.local
+ GET / 200 in 299ms (next.js: 197ms, application-code: 102ms)
+  Reload env: .env.local
+ GET / 200 in 431ms (next.js: 230ms, application-code: 201ms)
+  Reload env: .env.local
+ GET / 200 in 444ms (next.js: 284ms, application-code: 160ms)
+  Reload env: .env.local
+ GET / 200 in 690ms (next.js: 408ms, application-code: 281ms)
+  Reload env: .env.local
+ GET / 200 in 558ms (next.js: 288ms, application-code: 269ms)
+  Reload env: .env.local
+ GET / 200 in 391ms (next.js: 253ms, application-code: 138ms)
+  Reload env: .env.local
+ GET / 200 in 449ms (next.js: 217ms, application-code: 232ms)
+ GET / 200 in 103ms (next.js: 18ms, application-code: 85ms)
+  Reload env: .env.local
+ GET / 200 in 570ms (next.js: 335ms, application-code: 235ms)
+  Reload env: .env.local
+ GET / 200 in 305ms (next.js: 188ms, application-code: 117ms)
+ GET / 200 in 1418ms (next.js: 29ms, application-code: 1390ms)
+[browser] Image with src "/logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[browser] Image with src "/enreachlogo-transparent.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+ POST /api/contact 200 in 2.8s (next.js: 342ms, application-code: 2.5s)
+ POST /api/contact 200 in 2.0s (next.js: 25ms, application-code: 1992ms)

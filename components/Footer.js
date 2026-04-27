@@ -57,12 +57,9 @@ export default function Footer({ onNavigate }) {
         <div>
           <h3 className="text-lg font-semibold text-white">Contact Info</h3>
           <div className="mt-5 grid gap-3 text-sm leading-7 text-slate-300">
-            <a
-              href="mailto:info@enreachglobal.com"
-              className="transition duration-300 hover:text-white"
-            >
+            <p className="transition duration-300 hover:text-white">
               Email: info@enreachglobal.com
-            </a>
+            </p>
             <p>Phone: +1 4034087454</p>
             <p>Location: Canada</p>
           </div>

@@ -202,6 +202,35 @@ const CONTACT_FORM_FIELDS = {
   ],
 };
 
+const INITIAL_QUOTE_FORM = {
+  inquiryType: "buyer",
+  name: "",
+  email: "",
+  message: "",
+  materialRequired: "",
+  quantity: "",
+  location: "",
+  scrapType: "",
+  availableQuantity: "",
+  pickupLocation: "",
+  companyName: "",
+  businessType: "",
+  monthlyVolume: "",
+  countriesOfOperation: "",
+};
+
+const INITIAL_QUICK_ENQUIRY_FORM = {
+  name: "",
+  email: "",
+  requirement: "",
+};
+
+const INITIAL_SUBMISSION_STATE = {
+  isLoading: false,
+  success: "",
+  error: "",
+};
+
 function ClosePanelIcon({ className = "" }) {
   return (
     <svg
@@ -224,27 +253,16 @@ export default function Home() {
   const [currentImage, setCurrentImage] = useState(0);
   const [scrollY, setScrollY] = useState(0);
   const [activeSection, setActiveSection] = useState("home");
-  const [quoteForm, setQuoteForm] = useState({
-    inquiryType: "buyer",
-    name: "",
-    email: "",
-    message: "",
-    materialRequired: "",
-    quantity: "",
-    location: "",
-    scrapType: "",
-    availableQuantity: "",
-    pickupLocation: "",
-    companyName: "",
-    businessType: "",
-    monthlyVolume: "",
-    countriesOfOperation: "",
-  });
-  const [quickEnquiryForm, setQuickEnquiryForm] = useState({
-    name: "",
-    email: "",
-    requirement: "",
-  });
+  const [quoteForm, setQuoteForm] = useState(INITIAL_QUOTE_FORM);
+  const [quickEnquiryForm, setQuickEnquiryForm] = useState(
+    INITIAL_QUICK_ENQUIRY_FORM
+  );
+  const [quoteSubmission, setQuoteSubmission] = useState(
+    INITIAL_SUBMISSION_STATE
+  );
+  const [quickSubmission, setQuickSubmission] = useState(
+    INITIAL_SUBMISSION_STATE
+  );
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
   const pageRef = useRef(null);
   const floatingButtonRef = useRef(null);
@@ -387,34 +405,94 @@ export default function Home() {
   const handleQuoteFieldChange = (event) => {
     const { name, value } = event.target;
 
+    if (quoteSubmission.success || quoteSubmission.error) {
+      setQuoteSubmission(INITIAL_SUBMISSION_STATE);
+    }
+
     setQuoteForm((current) => ({
       ...current,
       [name]: value,
     }));
   };
 
-  const handleQuoteRequest = (event) => {
+  const submitContactForm = async (payload) => {
+    console.log("[contact] submitting payload", payload);
+
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    console.log("[contact] response received", {
+      ok: response.ok,
+      status: response.status,
+      result,
+    });
+
+    if (!response.ok) {
+      throw new Error(result.error || "Unable to send your enquiry right now.");
+    }
+
+    return result;
+  };
+
+  const handleQuoteRequest = async (event) => {
     event.preventDefault();
 
     const activeQuoteFields =
       CONTACT_FORM_FIELDS[quoteForm.inquiryType] ?? CONTACT_FORM_FIELDS.buyer;
-    const additionalDetails = activeQuoteFields
-      .map((field) => `${field.label}: ${quoteForm[field.name]}`)
-      .join("\n");
-    const subject = encodeURIComponent(
-      `${quoteForm.inquiryType[0].toUpperCase()}${quoteForm.inquiryType.slice(1)} Inquiry from ${
-        quoteForm.name || "Website Visitor"
-      }`
-    );
-    const body = encodeURIComponent(
-      `Inquiry Type: ${quoteForm.inquiryType}\nName: ${quoteForm.name}\nEmail: ${quoteForm.email}\n\nMessage:\n${quoteForm.message}\n\nAdditional Details:\n${additionalDetails}`
+    const details = Object.fromEntries(
+      activeQuoteFields.map((field) => [field.label, quoteForm[field.name]])
     );
 
-    window.location.href = `mailto:info@enreachglobal.com?subject=${subject}&body=${body}`;
+    setQuoteSubmission({
+      isLoading: true,
+      success: "",
+      error: "",
+    });
+
+    try {
+      await submitContactForm({
+        formType: "quote",
+        inquiryType: quoteForm.inquiryType,
+        name: quoteForm.name.trim(),
+        email: quoteForm.email.trim(),
+        message: quoteForm.message.trim(),
+        details,
+      });
+
+      setQuoteSubmission({
+        isLoading: false,
+        success: "Thank you. Your enquiry has been sent successfully.",
+        error: "",
+      });
+      setQuoteForm((current) => ({
+        ...INITIAL_QUOTE_FORM,
+        inquiryType: current.inquiryType,
+      }));
+    } catch (error) {
+      setQuoteSubmission({
+        isLoading: false,
+        success: "",
+        error:
+          error instanceof Error
+            ? error.message
+            : "Unable to send your enquiry right now.",
+      });
+    }
   };
 
   const handleQuickEnquiryFieldChange = (event) => {
     const { name, value } = event.target;
+
+    if (quickSubmission.success || quickSubmission.error) {
+      setQuickSubmission(INITIAL_SUBMISSION_STATE);
+    }
 
     setQuickEnquiryForm((current) => ({
       ...current,
@@ -422,17 +500,39 @@ export default function Home() {
     }));
   };
 
-  const handleQuickEnquirySubmit = (event) => {
+  const handleQuickEnquirySubmit = async (event) => {
     event.preventDefault();
 
-    const subject = encodeURIComponent(
-      `Quick Enquiry from ${quickEnquiryForm.name || "Website Visitor"}`
-    );
-    const body = encodeURIComponent(
-      `Name: ${quickEnquiryForm.name}\nEmail: ${quickEnquiryForm.email}\n\nRequirement:\n${quickEnquiryForm.requirement}`
-    );
+    setQuickSubmission({
+      isLoading: true,
+      success: "",
+      error: "",
+    });
 
-    window.location.href = `mailto:info@enreachglobal.com?subject=${subject}&body=${body}`;
+    try {
+      await submitContactForm({
+        formType: "quick-enquiry",
+        name: quickEnquiryForm.name.trim(),
+        email: quickEnquiryForm.email.trim(),
+        message: quickEnquiryForm.requirement.trim(),
+      });
+
+      setQuickSubmission({
+        isLoading: false,
+        success: "Thank you. Your enquiry has been sent successfully.",
+        error: "",
+      });
+      setQuickEnquiryForm(INITIAL_QUICK_ENQUIRY_FORM);
+    } catch (error) {
+      setQuickSubmission({
+        isLoading: false,
+        success: "",
+        error:
+          error instanceof Error
+            ? error.message
+            : "Unable to send your enquiry right now.",
+      });
+    }
   };
 
   const activeQuoteFields =
@@ -804,7 +904,11 @@ export default function Home() {
                   ))}
                 </div>
 
-                <form onSubmit={handleQuoteRequest} className="mt-6 grid gap-4">
+                <form
+                  onSubmit={handleQuoteRequest}
+                  className="mt-6 grid gap-4"
+                  aria-busy={quoteSubmission.isLoading}
+                >
                   <div className="inline-flex w-fit rounded-full border border-white/10 bg-white/6 p-1">
                     {CONTACT_FORM_TYPES.map((type) => {
                       const isActive = quoteForm.inquiryType === type.id;
@@ -819,6 +923,7 @@ export default function Home() {
                               inquiryType: type.id,
                             }))
                           }
+                          disabled={quoteSubmission.isLoading}
                           className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] transition duration-300 ${
                             isActive
                               ? "bg-white text-slate-950"
@@ -837,6 +942,7 @@ export default function Home() {
                     onChange={handleQuoteFieldChange}
                     placeholder="Name"
                     required
+                    disabled={quoteSubmission.isLoading}
                     className={contactInputClassName}
                   />
                   <input
@@ -846,6 +952,7 @@ export default function Home() {
                     onChange={handleQuoteFieldChange}
                     placeholder="Email"
                     required
+                    disabled={quoteSubmission.isLoading}
                     className={contactInputClassName}
                   />
                   <textarea
@@ -855,6 +962,7 @@ export default function Home() {
                     placeholder="Message"
                     rows={4}
                     required
+                    disabled={quoteSubmission.isLoading}
                     className={`${contactInputClassName} resize-none`}
                   />
                   {activeQuoteFields.map((field) =>
@@ -865,6 +973,7 @@ export default function Home() {
                         value={quoteForm[field.name]}
                         onChange={handleQuoteFieldChange}
                         required
+                        disabled={quoteSubmission.isLoading}
                         className={contactInputClassName}
                       >
                         <option value="">{field.label}</option>
@@ -884,16 +993,28 @@ export default function Home() {
                         placeholder={field.placeholder}
                         min={field.min}
                         required
+                        disabled={quoteSubmission.isLoading}
                         className={contactInputClassName}
                       />
                     )
                   )}
                   <button
                     type="submit"
+                    disabled={quoteSubmission.isLoading}
                     className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#f6d365] via-[#f7b267] to-[#ea580c] px-6 py-3.5 text-sm font-semibold text-slate-950 transition duration-300 hover:scale-[1.02]"
                   >
-                    Request Quote
+                    {quoteSubmission.isLoading ? "Sending..." : "Request Quote"}
                   </button>
+                  {(quoteSubmission.success || quoteSubmission.error) && (
+                    <p
+                      aria-live="polite"
+                      className={`text-sm leading-6 ${
+                        quoteSubmission.error ? "text-rose-300" : "text-emerald-300"
+                      }`}
+                    >
+                      {quoteSubmission.error || quoteSubmission.success}
+                    </p>
+                  )}
                   <div className="border-t border-white/10 pt-4 text-sm leading-7 text-white/60">
                     <p>Email: info@enreachglobal.com</p>
                     <p>Phone: +1 4034087454</p>
@@ -952,7 +1073,11 @@ export default function Home() {
             </h3>
           </div>
 
-          <form onSubmit={handleQuickEnquirySubmit} className="mt-5 grid gap-3">
+          <form
+            onSubmit={handleQuickEnquirySubmit}
+            className="mt-5 grid gap-3"
+            aria-busy={quickSubmission.isLoading}
+          >
             <input
               type="text"
               name="name"
@@ -960,6 +1085,7 @@ export default function Home() {
               onChange={handleQuickEnquiryFieldChange}
               placeholder="Name"
               required
+              disabled={quickSubmission.isLoading}
               className="rounded-xl border border-slate-200/80 bg-white/85 px-4 py-3 text-sm text-slate-900 outline-none transition duration-300 placeholder:text-slate-400 focus:border-slate-400 focus:ring-4 focus:ring-slate-200/70"
             />
             <input
@@ -969,6 +1095,7 @@ export default function Home() {
               onChange={handleQuickEnquiryFieldChange}
               placeholder="Email"
               required
+              disabled={quickSubmission.isLoading}
               className="rounded-xl border border-slate-200/80 bg-white/85 px-4 py-3 text-sm text-slate-900 outline-none transition duration-300 placeholder:text-slate-400 focus:border-slate-400 focus:ring-4 focus:ring-slate-200/70"
             />
             <textarea
@@ -978,14 +1105,26 @@ export default function Home() {
               placeholder="Requirement"
               rows={4}
               required
+              disabled={quickSubmission.isLoading}
               className="resize-none rounded-xl border border-slate-200/80 bg-white/85 px-4 py-3 text-sm text-slate-900 outline-none transition duration-300 placeholder:text-slate-400 focus:border-slate-400 focus:ring-4 focus:ring-slate-200/70"
             />
             <button
               type="submit"
+              disabled={quickSubmission.isLoading}
               className="mt-1 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-slate-950 via-slate-800 to-slate-700 px-5 py-3 text-sm font-semibold text-white transition duration-300 hover:scale-[1.02] hover:from-[#0f172a] hover:via-[#1e293b] hover:to-[#334155]"
             >
-              Send Enquiry
+              {quickSubmission.isLoading ? "Sending..." : "Send Enquiry"}
             </button>
+            {(quickSubmission.success || quickSubmission.error) && (
+              <p
+                aria-live="polite"
+                className={`text-sm leading-6 ${
+                  quickSubmission.error ? "text-rose-700" : "text-emerald-700"
+                }`}
+              >
+                {quickSubmission.error || quickSubmission.success}
+              </p>
+            )}
           </form>
         </div>
       </div>
