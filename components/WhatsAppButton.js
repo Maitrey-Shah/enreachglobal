@@ -22,7 +22,7 @@ export default function WhatsAppButton({
       target="_blank"
       rel="noreferrer"
       aria-label="Chat with Enreach Global on WhatsApp"
-      className="fixed bottom-6 left-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_20px_45px_-18px_rgba(37,211,102,0.82)] transition-transform duration-300 hover:scale-105 hover:bg-[#1fbe5d] sm:left-6"
+      className="contact-whatsapp-button fixed bottom-6 left-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_20px_45px_-18px_rgba(37,211,102,0.82)] transition-transform duration-300 hover:scale-105 hover:bg-[#1fbe5d] sm:left-6"
     >
       <WhatsAppIcon className="h-7 w-7" />
     </a>

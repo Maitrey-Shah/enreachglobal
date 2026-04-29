@@ -856,7 +856,7 @@ export default function Home() {
         <section id="contact" className="scroll-mt-28 px-5 py-20 sm:px-6 lg:px-8">
           <div
             data-reveal
-            className="mx-auto max-w-7xl overflow-hidden rounded-[36px] bg-slate-950 px-6 py-12 text-white shadow-[0_40px_100px_-40px_rgba(15,23,42,0.55)] sm:px-8 lg:px-12 lg:py-16"
+            className="contact-shell mx-auto max-w-7xl overflow-hidden rounded-[36px] bg-slate-950 px-6 py-12 text-white shadow-[0_40px_100px_-40px_rgba(15,23,42,0.55)] sm:px-8 lg:px-12 lg:py-16"
           >
             <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
               <div className="max-w-2xl">
@@ -886,7 +886,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="rounded-[30px] border border-white/10 bg-white/8 p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.8)] backdrop-blur">
+              <div className="contact-form-card rounded-[30px] border border-white/10 bg-white/8 p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.8)] backdrop-blur">
                 <div className="space-y-3">
                   {CONTACT_FEATURES.map((item) => (
                     <div
@@ -1030,7 +1030,7 @@ export default function Home() {
       <Footer onNavigate={scrollToSection} />
       <WhatsAppButton />
 
-      <div className="fixed bottom-6 right-6 z-50 flex max-w-[calc(100vw-1.5rem)] flex-col items-end sm:max-w-none">
+      <div className="contact-floating-dock fixed bottom-6 right-6 z-50 flex max-w-[calc(100vw-1.5rem)] flex-col items-end sm:max-w-none">
         <button
           ref={floatingButtonRef}
           type="button"
@@ -1049,7 +1049,7 @@ export default function Home() {
         <div
           id="quick-enquiry-panel"
           ref={floatingPanelRef}
-          className={`fixed bottom-6 right-6 z-50 w-[min(20rem,calc(100vw-1.5rem))] border border-white/45 bg-white/80 p-5 backdrop-blur-lg shadow-2xl rounded-xl transition-all duration-500 ${
+          className={`contact-floating-panel fixed bottom-6 right-6 z-50 w-[min(20rem,calc(100vw-1.5rem))] rounded-xl border border-white/45 bg-white/80 p-5 shadow-2xl backdrop-blur-lg transition-all duration-500 ${
             isEnquiryOpen
               ? "pointer-events-auto visible translate-y-0 scale-100 opacity-100"
               : "pointer-events-none invisible translate-y-4 scale-[0.8] opacity-0"
