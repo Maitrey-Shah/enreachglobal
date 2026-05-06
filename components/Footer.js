@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 
 const FOOTER_LINKS = [
   { id: "home", label: "Home" },
@@ -11,6 +12,19 @@ const FOOTER_LINKS = [
 ];
 
 export default function Footer({ onNavigate }) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const isHomePage = pathname === "/";
+
+  const handleLinkClick = (sectionId) => {
+    if (isHomePage && typeof onNavigate === "function") {
+      onNavigate(sectionId);
+      return;
+    }
+
+    router.push(sectionId === "home" ? "/" : `/#${sectionId}`);
+  };
+
   return (
     <footer className="bg-[#0f172a] px-5 py-12 text-white sm:px-6 lg:px-8">
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-3">
@@ -18,7 +32,7 @@ export default function Footer({ onNavigate }) {
           <div className="group flex items-center gap-4">
             <div className="relative h-16 w-16 flex-shrink-0 md:h-[4.5rem] md:w-[4.5rem]">
               <Image
-                src="/enreachlogo-transparent.png"
+                src="/logo.svg"
                 alt="Enreach Global logo"
                 fill
                 className="object-contain transition-transform duration-300 group-hover:scale-105 group-hover:opacity-95"
@@ -45,7 +59,7 @@ export default function Footer({ onNavigate }) {
               <button
                 key={link.id}
                 type="button"
-                onClick={() => onNavigate?.(link.id)}
+                onClick={() => handleLinkClick(link.id)}
                 className="w-fit text-sm text-slate-300 transition duration-300 hover:translate-x-1 hover:text-white"
               >
                 {link.label}

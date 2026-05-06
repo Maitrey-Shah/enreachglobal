@@ -1,5 +1,6 @@
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -13,9 +14,49 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata = {
-  title: "Enreach Global | Premium Metal Scrap Trading",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Enreach Global | Premium Metal Scrap Trading",
+    template: `%s | ${SITE_NAME}`,
+  },
+  icons: {
+    icon: "/logo.svg",
+    shortcut: "/logo.svg",
+    apple: "/logo.svg",
+  },
   description:
     "Enreach Global is a premium metal scrap trading company specializing in aluminium, copper, and brass supply for industrial buyers worldwide.",
+  keywords: [
+    "metal scrap trading",
+    "aluminium scrap supplier",
+    "copper scrap trading",
+    "brass scrap exporter",
+    "industrial scrap buyer",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Enreach Global | Premium Metal Scrap Trading",
+    description:
+      "Enreach Global is a premium metal scrap trading company specializing in aluminium, copper, and brass supply for industrial buyers worldwide.",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    type: "website",
+    images: [
+      {
+        url: DEFAULT_OG_IMAGE,
+        alt: "Enreach Global premium metal scrap trading",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Enreach Global | Premium Metal Scrap Trading",
+    description:
+      "Enreach Global is a premium metal scrap trading company specializing in aluminium, copper, and brass supply for industrial buyers worldwide.",
+    images: [DEFAULT_OG_IMAGE],
+  },
 };
 
 export default function RootLayout({ children }) {

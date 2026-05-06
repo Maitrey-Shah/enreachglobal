@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 const NAV_ITEMS = [
@@ -8,6 +9,7 @@ const NAV_ITEMS = [
   { id: "about", label: "About" },
   { id: "products", label: "Products" },
   { id: "locations", label: "Locations" },
+  { id: "blog", label: "Blog" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -119,6 +121,8 @@ export default function Navbar({
   onNavigate,
   onProductNavigate,
 }) {
+  const pathname = usePathname();
+  const router = useRouter();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isProductsOpen, setIsProductsOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState(PRODUCT_GROUPS[0].id);
@@ -131,6 +135,7 @@ export default function Navbar({
 
   const activeGroup =
     PRODUCT_GROUPS.find((group) => group.id === activeMenu) ?? PRODUCT_GROUPS[0];
+  const isHomePage = pathname === "/";
 
   const clearTimer = (timerRef) => {
     if (timerRef.current) {
@@ -181,18 +186,31 @@ export default function Navbar({
     setIsMobileOpen(false);
     setExpandedMobileMenu(false);
     setIsProductsOpen(false);
-    if (typeof onNavigate === "function") {
-      onNavigate(sectionId);
+
+    if (sectionId === "blog") {
+      router.push("/blog");
+      return;
     }
+
+    if (isHomePage && typeof onNavigate === "function") {
+      onNavigate(sectionId);
+      return;
+    }
+
+    router.push(sectionId === "home" ? "/" : `/#${sectionId}`);
   };
 
   const handleProductClick = (productId) => {
     setIsMobileOpen(false);
     setExpandedMobileMenu(false);
     setIsProductsOpen(false);
-    if (typeof onProductNavigate === "function") {
+
+    if (isHomePage && typeof onProductNavigate === "function") {
       onProductNavigate(productId);
+      return;
     }
+
+    router.push(`/#${productId}`);
   };
 
   useEffect(() => {
@@ -214,7 +232,7 @@ export default function Navbar({
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="relative h-14 w-14 flex-shrink-0 sm:h-16 sm:w-16 lg:h-20 lg:w-20">
               <Image
-                src="/logo.png"
+                src="/logo.svg"
                 alt="Enreach Global"
                 fill
                 className="object-contain transition-transform duration-300 group-hover:scale-105 group-hover:opacity-95"
@@ -390,7 +408,7 @@ export default function Navbar({
         }`}
       >
         <nav className="space-y-2 px-5 py-5 sm:px-6">
-          {NAV_ITEMS.filter((item) => item.id !== "products").map((item) => {
+          {NAV_ITEMS.slice(0, 2).map((item) => {
             const isActive = activeSection === item.id;
 
             return (
@@ -458,6 +476,25 @@ export default function Navbar({
               </div>
             </div>
           </div>
+
+          {NAV_ITEMS.slice(3).map((item) => {
+            const isActive = activeSection === item.id;
+
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleNavClick(item.id)}
+                className={`block w-full rounded-[14px] px-4 py-3 text-left text-sm font-medium uppercase tracking-[0.14em] transition-colors duration-300 ${
+                  isActive
+                    ? "bg-slate-950 text-white"
+                    : "text-slate-800 hover:bg-slate-100"
+                }`}
+              >
+                {item.label}
+              </button>
+            );
+          })}
 
           <button
             type="button"

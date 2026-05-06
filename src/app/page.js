@@ -783,12 +783,26 @@ export default function Home() {
                   data-reveal
                   className="scroll-mt-28 overflow-hidden rounded-[32px] border border-slate-200/80 bg-white shadow-[0_30px_70px_-36px_rgba(15,23,42,0.3)] transition-all duration-300 hover:-translate-y-[5px] hover:shadow-[0_34px_80px_-36px_rgba(15,23,42,0.35)]"
                 >
-                  <div className="grid gap-0 md:grid-cols-[0.95fr_1.05fr]">
-                    <div className="overflow-hidden">
+                  <div
+                    className={`grid gap-0 md:grid-cols-[0.95fr_1.05fr] ${
+                      product.id === "brass-rod" ? "lg:items-stretch" : ""
+                    }`}
+                  >
+                    <div
+                      className={`overflow-hidden lg:h-full ${
+                        product.id === "brass-rod"
+                          ? "lg:relative lg:self-stretch lg:min-h-full"
+                          : ""
+                      }`}
+                    >
                       <img
                         src={product.image}
                         alt={product.title}
-                        className="h-full min-h-64 w-full object-cover transition-transform duration-500 hover:scale-105"
+                        className={`min-h-64 w-full object-cover transition-transform duration-500 hover:scale-105 lg:block lg:h-full ${
+                          product.id === "brass-rod"
+                            ? "lg:absolute lg:inset-0 lg:block lg:h-full lg:w-full lg:object-cover"
+                            : ""
+                        }`}
                       />
                     </div>
                     <div className="flex flex-col justify-center p-7">

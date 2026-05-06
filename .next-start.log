@@ -79,3 +79,4 @@
 [browser] Image with src "/enreachlogo-transparent.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
  POST /api/contact 200 in 2.8s (next.js: 342ms, application-code: 2.5s)
  POST /api/contact 200 in 2.0s (next.js: 25ms, application-code: 1992ms)
+^CTerminate batch job (Y/N)? 
