@@ -1,12 +1,33 @@
 import { getAllBlogPosts } from "@/data/blogPosts";
-import { SITE_URL } from "@/lib/site";
+import { buildCanonicalUrl } from "@/lib/site";
 
 export default function sitemap() {
-  const staticRoutes = ["", "/blog"];
-  const blogRoutes = getAllBlogPosts().map((post) => `/blog/${post.slug}`);
+  const staticRoutes = [
+    {
+      path: "/",
+      lastModified: new Date("2026-05-06"),
+      changeFrequency: "weekly",
+      priority: 1,
+    },
+    {
+      path: "/blog",
+      lastModified: new Date("2026-05-06"),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+  ];
 
-  return [...staticRoutes, ...blogRoutes].map((path) => ({
-    url: `${SITE_URL}${path || "/"}`,
-    lastModified: new Date(),
+  const blogRoutes = getAllBlogPosts().map((post) => ({
+    path: `/blog/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  return [...staticRoutes, ...blogRoutes].map((entry) => ({
+    url: buildCanonicalUrl(entry.path),
+    lastModified: entry.lastModified,
+    changeFrequency: entry.changeFrequency,
+    priority: entry.priority,
   }));
 }

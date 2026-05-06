@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
 const FOOTER_LINKS = [
@@ -15,6 +16,8 @@ export default function Footer({ onNavigate }) {
   const pathname = usePathname();
   const router = useRouter();
   const isHomePage = pathname === "/";
+  const getSectionHref = (sectionId) =>
+    sectionId === "home" ? "/" : `/#${sectionId}`;
 
   const handleLinkClick = (sectionId) => {
     if (isHomePage && typeof onNavigate === "function") {
@@ -56,14 +59,19 @@ export default function Footer({ onNavigate }) {
           <h3 className="text-lg font-semibold text-white">Quick Links</h3>
           <div className="mt-5 grid gap-3">
             {FOOTER_LINKS.map((link) => (
-              <button
+              <Link
                 key={link.id}
-                type="button"
-                onClick={() => handleLinkClick(link.id)}
+                href={getSectionHref(link.id)}
+                onClick={(event) => {
+                  if (isHomePage && typeof onNavigate === "function") {
+                    event.preventDefault();
+                    handleLinkClick(link.id);
+                  }
+                }}
                 className="w-fit text-sm text-slate-300 transition duration-300 hover:translate-x-1 hover:text-white"
               >
                 {link.label}
-              </button>
+              </Link>
             ))}
           </div>
         </div>
@@ -71,10 +79,22 @@ export default function Footer({ onNavigate }) {
         <div>
           <h3 className="text-lg font-semibold text-white">Contact Info</h3>
           <div className="mt-5 grid gap-3 text-sm leading-7 text-slate-300">
-            <p className="transition duration-300 hover:text-white">
-              Email: info@enreachglobal.com
+            <p>
+              <a
+                href="mailto:info@enreachglobal.com"
+                className="transition duration-300 hover:text-white"
+              >
+                Email: info@enreachglobal.com
+              </a>
             </p>
-            <p>Phone: +1 4034087454</p>
+            <p>
+              <a
+                href="tel:+14034087454"
+                className="transition duration-300 hover:text-white"
+              >
+                Phone: +1 4034087454
+              </a>
+            </p>
             <p>Location: Canada</p>
           </div>
         </div>

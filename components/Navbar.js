@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -136,6 +137,9 @@ export default function Navbar({
   const activeGroup =
     PRODUCT_GROUPS.find((group) => group.id === activeMenu) ?? PRODUCT_GROUPS[0];
   const isHomePage = pathname === "/";
+  const getSectionHref = (sectionId) =>
+    sectionId === "blog" ? "/blog" : sectionId === "home" ? "/" : `/#${sectionId}`;
+  const getProductHref = (productId) => `/#${productId}`;
 
   const clearTimer = (timerRef) => {
     if (timerRef.current) {
@@ -224,9 +228,14 @@ export default function Navbar({
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 shadow-[0_20px_40px_-32px_rgba(15,23,42,0.35)] backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-6 lg:px-8">
-        <button
-          type="button"
-          onClick={() => handleNavClick("home")}
+        <Link
+          href="/"
+          onClick={(event) => {
+            if (isHomePage && typeof onNavigate === "function") {
+              event.preventDefault();
+              handleNavClick("home");
+            }
+          }}
           className="group flex items-center gap-3 text-left text-slate-950 sm:gap-4"
         >
           <div className="flex items-center gap-3 sm:gap-4">
@@ -244,22 +253,31 @@ export default function Navbar({
               <p className="text-[0.62rem] tracking-[0.18em] text-gray-500 sm:text-xs sm:tracking-[0.2em]">
                 GLOBAL METAL TRADE
               </p>
-              <h1 className="font-serif text-lg font-semibold transition-colors duration-300 group-hover:text-slate-700 sm:text-xl lg:text-2xl">
+              <p className="font-serif text-lg font-semibold transition-colors duration-300 group-hover:text-slate-700 sm:text-xl lg:text-2xl">
                 Enreach Global
-              </h1>
+              </p>
             </div>
           </div>
-        </button>
+        </Link>
 
         <nav className="hidden items-center gap-2 lg:flex">
           {NAV_ITEMS.slice(0, 2).map((item) => {
             const isActive = activeSection === item.id;
 
             return (
-              <button
+              <Link
                 key={item.id}
-                type="button"
-                onClick={() => handleNavClick(item.id)}
+                href={getSectionHref(item.id)}
+                onClick={(event) => {
+                  if (item.id === "blog") {
+                    return;
+                  }
+
+                  if (isHomePage && typeof onNavigate === "function") {
+                    event.preventDefault();
+                    handleNavClick(item.id);
+                  }
+                }}
                 className={`rounded-full px-4 py-2.5 text-sm font-medium uppercase tracking-[0.14em] transition-all duration-300 ${
                   isActive
                     ? "bg-slate-950 text-white"
@@ -267,7 +285,7 @@ export default function Navbar({
                 }`}
               >
                 {item.label}
-              </button>
+              </Link>
             );
           })}
 
@@ -342,17 +360,26 @@ export default function Navbar({
                 </div>
                 <div className="space-y-1">
                   {activeGroup.items.map((item) => (
-                    <button
+                    <Link
                       key={item.id}
-                      type="button"
-                      onClick={() => handleProductClick(item.id)}
+                      href={getProductHref(item.id)}
+                      onClick={(event) => {
+                        if (isHomePage && typeof onProductNavigate === "function") {
+                          event.preventDefault();
+                          handleProductClick(item.id);
+                        } else {
+                          setIsMobileOpen(false);
+                          setExpandedMobileMenu(false);
+                          setIsProductsOpen(false);
+                        }
+                      }}
                       className="group flex w-full items-center justify-between rounded-[14px] px-3.5 py-3 text-left text-sm font-medium text-slate-700 transition-all duration-300 hover:bg-slate-100 hover:text-slate-950"
                     >
                       <span className="translate-x-0 transition-transform duration-300 group-hover:translate-x-1">
                         {item.label}
                       </span>
                       <ArrowRightIcon className="h-4 w-4 text-slate-400 transition-transform duration-300 group-hover:translate-x-1" />
-                    </button>
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -363,10 +390,19 @@ export default function Navbar({
             const isActive = activeSection === item.id;
 
             return (
-              <button
+              <Link
                 key={item.id}
-                type="button"
-                onClick={() => handleNavClick(item.id)}
+                href={getSectionHref(item.id)}
+                onClick={(event) => {
+                  if (item.id === "blog") {
+                    return;
+                  }
+
+                  if (isHomePage && typeof onNavigate === "function") {
+                    event.preventDefault();
+                    handleNavClick(item.id);
+                  }
+                }}
                 className={`rounded-full px-4 py-2.5 text-sm font-medium uppercase tracking-[0.14em] transition-all duration-300 ${
                   isActive
                     ? "bg-slate-950 text-white"
@@ -374,17 +410,22 @@ export default function Navbar({
                 }`}
               >
                 {item.label}
-              </button>
+              </Link>
             );
           })}
 
-          <button
-            type="button"
-            onClick={() => handleNavClick("contact")}
+          <Link
+            href="/#contact"
+            onClick={(event) => {
+              if (isHomePage && typeof onNavigate === "function") {
+                event.preventDefault();
+                handleNavClick("contact");
+              }
+            }}
             className="ml-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-800"
           >
             Get In Touch
-          </button>
+          </Link>
         </nav>
 
         <button

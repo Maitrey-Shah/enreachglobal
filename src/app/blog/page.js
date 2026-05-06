@@ -2,42 +2,65 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BlogCard from "@/components/BlogCard";
 import { getAllBlogPosts } from "@/data/blogPosts";
-import { SITE_NAME, buildCanonicalUrl } from "@/lib/site";
+import {
+  buildBreadcrumbSchema,
+  buildCollectionPageSchema,
+  buildPageMetadata,
+} from "@/lib/seo";
+import { SITE_NAME } from "@/lib/site";
 
 const blogPosts = getAllBlogPosts();
 
-export const metadata = {
-  title: "Industrial Scrap Market Blog",
-  description:
-    "Read Enreach Global insights on copper scrap trading, aluminium scrap recycling, and brass scrap market trends for industrial buyers.",
-  keywords: [
-    "industrial scrap blog",
-    "copper scrap trading insights",
-    "aluminium scrap recycling blog",
-    "brass scrap market trends",
-    "metal scrap export insights",
-  ],
-  alternates: {
-    canonical: buildCanonicalUrl("/blog"),
-  },
-  openGraph: {
-    title: `Industrial Scrap Market Blog | ${SITE_NAME}`,
-    description:
-      "Read Enreach Global insights on copper scrap trading, aluminium scrap recycling, and brass scrap market trends for industrial buyers.",
-    url: buildCanonicalUrl("/blog"),
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `Industrial Scrap Market Blog | ${SITE_NAME}`,
-    description:
-      "Read Enreach Global insights on copper scrap trading, aluminium scrap recycling, and brass scrap market trends for industrial buyers.",
-  },
-};
+const blogTitle = "Industrial Scrap Market Blog";
+const blogDescription =
+  "Read Enreach Global insights on copper scrap trading, aluminium scrap recycling, brass scrap demand, and bulk industrial scrap export strategy.";
+const blogKeywords = [
+  "industrial scrap blog",
+  "copper scrap trading insights",
+  "aluminium scrap recycling blog",
+  "brass scrap market trends",
+  "metal scrap export insights",
+  "bulk scrap export blog",
+];
+
+export const metadata = buildPageMetadata({
+  title: blogTitle,
+  description: blogDescription,
+  keywords: blogKeywords,
+  path: "/blog",
+  type: "website",
+});
 
 export default function BlogPage() {
+  const structuredData = [
+    buildCollectionPageSchema({
+      title: blogTitle,
+      description: blogDescription,
+      path: "/blog",
+      about: [
+        "Copper scrap exporters",
+        "Aluminium scrap suppliers",
+        "Brass scrap recycling",
+        "Industrial metal trading",
+      ],
+    }),
+    buildBreadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: "Blog", path: "/blog" },
+    ]),
+  ];
+
   return (
     <>
+      {structuredData.map((schema, index) => (
+        <script
+          key={`${schema["@type"]}-${index}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schema),
+          }}
+        />
+      ))}
       <main className="min-h-screen bg-[radial-gradient(circle_at_top,#fdf8f1_0%,#f6f2eb_48%,#efe7dc_100%)] text-slate-950">
         <Navbar activeSection="blog" />
 

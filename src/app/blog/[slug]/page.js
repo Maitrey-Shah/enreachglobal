@@ -5,13 +5,19 @@ import { notFound } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BlogCard from "@/components/BlogCard";
+import { buildBreadcrumbSchema } from "@/lib/seo";
 import {
   formatBlogDate,
   getAllBlogPosts,
   getBlogPostBySlug,
   getRelatedBlogPosts,
 } from "@/data/blogPosts";
-import { SITE_NAME, buildCanonicalUrl } from "@/lib/site";
+import {
+  COMPANY_LOGO,
+  SITE_NAME,
+  buildCanonicalUrl,
+  buildImageUrl,
+} from "@/lib/site";
 
 export function generateStaticParams() {
   return getAllBlogPosts().map((post) => ({
@@ -25,7 +31,7 @@ function buildArticleStructuredData(post, canonicalUrl) {
     "@type": "BlogPosting",
     headline: post.title,
     description: post.metaDescription,
-    image: [buildCanonicalUrl(post.image)],
+    image: [buildImageUrl(post.image)],
     datePublished: post.date,
     dateModified: post.date,
     articleSection: post.category,
@@ -37,9 +43,37 @@ function buildArticleStructuredData(post, canonicalUrl) {
     publisher: {
       "@type": "Organization",
       name: SITE_NAME,
+      logo: {
+        "@type": "ImageObject",
+        url: buildImageUrl(COMPANY_LOGO),
+      },
     },
     mainEntityOfPage: canonicalUrl,
   };
+}
+
+function getArticleResourceLinks(post) {
+  if (post.category.includes("Copper")) {
+    return [
+      { href: "/#copper-berry", label: "Explore Berry copper scrap supply" },
+      {
+        href: "/#copper-birch-cliff",
+        label: "Review Birch Cliff copper scrap availability",
+      },
+    ];
+  }
+
+  if (post.category.includes("Aluminium")) {
+    return [
+      { href: "/#tally", label: "Explore Tally aluminium scrap supply" },
+      { href: "/#ubc", label: "Review UBC aluminium scrap availability" },
+    ];
+  }
+
+  return [
+    { href: "/#brass-honey", label: "Explore Honey Scrap brass supply" },
+    { href: "/#brass-rod", label: "Review Brass Rod scrap availability" },
+  ];
 }
 
 export async function generateMetadata({ params }) {
@@ -77,7 +111,7 @@ export async function generateMetadata({ params }) {
       publishedTime: post.date,
       images: [
         {
-          url: post.image,
+          url: buildImageUrl(post.image),
           alt: post.title,
         },
       ],
@@ -87,7 +121,7 @@ export async function generateMetadata({ params }) {
       card: "summary_large_image",
       title: post.metaTitle,
       description: post.metaDescription,
-      images: [post.image],
+      images: [buildImageUrl(post.image)],
     },
   };
 }
@@ -103,6 +137,12 @@ export default async function BlogPostPage({ params }) {
   const relatedPosts = getRelatedBlogPosts(post.slug);
   const canonicalUrl = buildCanonicalUrl(`/blog/${post.slug}`);
   const articleStructuredData = buildArticleStructuredData(post, canonicalUrl);
+  const breadcrumbStructuredData = buildBreadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "Blog", path: "/blog" },
+    { name: post.title, path: `/blog/${post.slug}` },
+  ]);
+  const articleResourceLinks = getArticleResourceLinks(post);
 
   return (
     <>
@@ -114,12 +154,17 @@ export default async function BlogPostPage({ params }) {
           itemScope
           itemType="https://schema.org/BlogPosting"
         >
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(articleStructuredData),
-            }}
-          />
+          {[articleStructuredData, breadcrumbStructuredData].map(
+            (schema, index) => (
+              <script
+                key={`${schema["@type"]}-${index}`}
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify(schema),
+                }}
+              />
+            )
+          )}
 
           <div className="mx-auto max-w-6xl">
             <div className="mx-auto max-w-4xl">
@@ -149,7 +194,7 @@ export default async function BlogPostPage({ params }) {
                   <time dateTime={post.date} itemProp="datePublished">
                     {formatBlogDate(post.date)}
                   </time>
-                  <span aria-hidden="true">•</span>
+                  <span aria-hidden="true">&bull;</span>
                   <span>{post.readTime}</span>
                 </div>
 
@@ -262,6 +307,40 @@ export default async function BlogPostPage({ params }) {
                       {post.conclusion}
                     </p>
                   </section>
+
+                  <section className="mt-12 rounded-[28px] border border-slate-200 bg-white px-6 py-7">
+                    <h2 className="text-3xl font-semibold text-slate-950">
+                      Continue Your Sourcing Research
+                    </h2>
+                    <p className="mt-4 text-base leading-8 text-slate-700">
+                      Use these internal resources to move from market research
+                      into supplier evaluation, product review, and direct
+                      industrial scrap enquiries.
+                    </p>
+                    <div className="mt-6 flex flex-wrap gap-3">
+                      {articleResourceLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className="inline-flex rounded-full border border-slate-200 bg-[#f7f4ef] px-4 py-2.5 text-sm font-semibold text-slate-900 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-700"
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                      <Link
+                        href="/#contact"
+                        className="inline-flex rounded-full border border-slate-200 bg-[#f7f4ef] px-4 py-2.5 text-sm font-semibold text-slate-900 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-700"
+                      >
+                        Contact Enreach Global for bulk scrap trade support
+                      </Link>
+                      <Link
+                        href="/blog"
+                        className="inline-flex rounded-full border border-slate-200 bg-[#f7f4ef] px-4 py-2.5 text-sm font-semibold text-slate-900 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-700"
+                      >
+                        Browse more industrial scrap market articles
+                      </Link>
+                    </div>
+                  </section>
                 </div>
               </div>
 
@@ -309,3 +388,4 @@ export default async function BlogPostPage({ params }) {
     </>
   );
 }
+
