@@ -5,204 +5,35 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Navbar from "@/components/Navbar";
+import CertificationsSection from "@/components/CertificationsSection";
 import Footer from "@/components/Footer";
+import FounderSection from "@/components/FounderSection";
 import MapCard from "@/components/MapCard";
+import Navbar from "@/components/Navbar";
+import TrustSection from "@/components/TrustSection";
 import WhatsAppButton from "@/components/WhatsAppButton";
-
-const SECTION_IDS = ["home", "about", "products", "locations", "contact"];
-
-const HERO_IMAGES = ["/hero1.png", "/hero2.jpg", "/hero3.jpg"];
-
-const PRODUCT_DETAILS = [
-  {
-    id: "tally",
-    category: "Aluminium Scrap",
-    title: "Tally",
-    description:
-      "Old sheet aluminium scrap commonly sourced from siding, gutters, and other clean, uncoated sheet applications.",
-    highlights: [
-      "Old sheet aluminium scrap",
-      "Collected from siding and gutters",
-      "Best processed clean and uncoated",
-    ],
-    image: "/hero1.png",
-  },
-  {
-    id: "ubc",
-    category: "Aluminium Scrap",
-    title: "UBC",
-    description:
-      "Used beverage cans with one of the highest recycling recovery rates in the metal supply chain.",
-    highlights: [
-      "Used beverage cans",
-      "High recycling recovery rate",
-      "Can return to shelf in about 60 days",
-    ],
-    image: "/hero2.jpg",
-  },
-  {
-    id: "cables",
-    category: "Aluminium Scrap",
-    title: "Aluminium Cables",
-    description:
-      "Power transmission and industrial aluminium wire grades supplied in clean and insulated variants.",
-    highlights: [
-      "Power transmission wires",
-      "Clean and insulated types",
-      "Sorted for efficient downstream recovery",
-    ],
-    image: "/hero3.jpg",
-  },
-  {
-    id: "utensils",
-    category: "Aluminium Scrap",
-    title: "Aluminium Utensils",
-    description:
-      "Household and kitchen aluminium items prepared for recycling after separation from mixed material components.",
-    highlights: [
-      "Kitchen and cookware items",
-      "Remove plastic and steel parts first",
-      "Prepared for cleaner melt recovery",
-    ],
-    image: "/hero2.jpg",
-  },
-];
-
-const SECONDARY_PRODUCTS = [
-  {
-    id: "copper-berry",
-    group: "Copper Scrap",
-    title: "Berry",
-    description:
-      "High-purity copper wire and cable scrap valued for conductivity and consistent industrial reuse.",
-    image: "/hero3.jpg",
-  },
-  {
-    id: "copper-birch-cliff",
-    group: "Copper Scrap",
-    title: "Birch Cliff",
-    description:
-      "Recovered copper-bearing fractions processed for quality grading, sorting, and export readiness.",
-    image: "/hero1.png",
-  },
-  {
-    id: "brass-honey",
-    group: "Brass Scrap",
-    title: "Honey Scrap",
-    description:
-      "Clean yellow brass scrap suited to secondary melting programs and precision metal manufacturing.",
-    image: "/hero2.jpg",
-  },
-  {
-    id: "brass-rod",
-    group: "Brass Scrap",
-    title: "Brass Rod",
-    description:
-      "Brass rod and turning grades handled for high-value recovery across engineering and fabrication sectors.",
-    image: "/hero3.jpg",
-  },
-];
-
-const LOCATION_CARDS = [
-  {
-    title: "Global Sourcing",
-    text: "We collaborate with suppliers worldwide to maintain a strong and consistent scrap procurement network.",
-  },
-  {
-    title: "Export Coordination",
-    text: "We handle documentation, compliance, and shipment planning for seamless international trade.",
-  },
-  {
-    title: "Industrial Buyers",
-    text: "We supply refineries, smelters, and processors with reliable bulk scrap materials.",
-  },
-];
-
-const CONTACT_FEATURES = [
-  "Aluminium, Copper, Brass supply",
-  "Global sourcing support",
-  "Fast quotation & shipment coordination",
-];
-
-const CONTACT_FORM_TYPES = [
-  { id: "buyer", label: "Buyer" },
-  { id: "seller", label: "Seller" },
-  { id: "enterprise", label: "Enterprise" },
-];
-
-const CONTACT_FORM_FIELDS = {
-  buyer: [
-    {
-      name: "materialRequired",
-      label: "Material Required",
-      placeholder: "Material Required",
-      type: "select",
-      options: ["Aluminium Scrap", "Copper Scrap", "Brass Scrap"],
-    },
-    {
-      name: "quantity",
-      label: "Quantity (tons)",
-      placeholder: "Quantity (tons)",
-      type: "number",
-      min: "0",
-    },
-    {
-      name: "location",
-      label: "Location",
-      placeholder: "Location",
-      type: "text",
-    },
-  ],
-  seller: [
-    {
-      name: "scrapType",
-      label: "Scrap Type",
-      placeholder: "Scrap Type",
-      type: "text",
-    },
-    {
-      name: "availableQuantity",
-      label: "Available Quantity",
-      placeholder: "Available Quantity",
-      type: "number",
-      min: "0",
-    },
-    {
-      name: "pickupLocation",
-      label: "Pickup Location",
-      placeholder: "Pickup Location",
-      type: "text",
-    },
-  ],
-  enterprise: [
-    {
-      name: "companyName",
-      label: "Company Name",
-      placeholder: "Company Name",
-      type: "text",
-    },
-    {
-      name: "businessType",
-      label: "Business Type",
-      placeholder: "Business Type",
-      type: "select",
-      options: ["Buyer", "Seller", "Both"],
-    },
-    {
-      name: "monthlyVolume",
-      label: "Monthly Volume",
-      placeholder: "Monthly Volume",
-      type: "text",
-    },
-    {
-      name: "countriesOfOperation",
-      label: "Countries of Operation",
-      placeholder: "Countries of Operation",
-      type: "text",
-    },
-  ],
-};
+import { CERTIFICATIONS } from "@/data/companyProfile";
+import {
+  COMPANY_STATISTICS,
+  CONTACT_FEATURES,
+  CONTACT_FORM_FIELDS,
+  CONTACT_FORM_TYPES,
+  GLOBAL_PRESENCE_INDICATORS,
+  HERO_IMAGES,
+  INDUSTRY_EXPERTISE,
+  INDUSTRY_FOCUS,
+  LOCATION_CARDS,
+  PRODUCT_DETAILS,
+  SECONDARY_PRODUCTS,
+  SECTION_IDS,
+  SERVICE_OFFERINGS,
+  WHY_CHOOSE_US_ITEMS,
+} from "@/data/homeContent";
+import {
+  COMPANY_EMAIL,
+  COMPANY_LOCATION,
+  COMPANY_PHONE,
+} from "@/lib/site";
 
 const INITIAL_QUOTE_FORM = {
   inquiryType: "buyer",
@@ -333,6 +164,11 @@ export default function HomePageClient() {
       );
 
       gsap.utils.toArray("[data-reveal]").forEach((element) => {
+        if (element.getBoundingClientRect().top < window.innerHeight * 0.95) {
+          gsap.set(element, { y: 0, opacity: 1 });
+          return;
+        }
+
         gsap.fromTo(
           element,
           { y: 48, opacity: 0 },
@@ -350,7 +186,15 @@ export default function HomePageClient() {
       });
     }, pageRef);
 
-    return () => context.revert();
+    const refreshFrame = window.requestAnimationFrame(() => {
+      ScrollTrigger.refresh();
+      ScrollTrigger.update();
+    });
+
+    return () => {
+      window.cancelAnimationFrame(refreshFrame);
+      context.revert();
+    };
   }, []);
 
   useEffect(() => {
@@ -643,58 +487,16 @@ export default function HomePageClient() {
           </div>
         </section>
 
-        <section id="about" className="scroll-mt-28 px-5 py-20 sm:px-6 lg:px-8">
-          <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-            <div data-reveal className="space-y-6">
-              <p className="text-sm font-semibold uppercase tracking-[0.32em] text-slate-500">
-                About
-              </p>
-              <h2 className="max-w-2xl text-4xl leading-tight font-semibold text-slate-950 md:text-5xl">
-                Global metal trading built for disciplined industrial supply
-                chains.
-              </h2>
-              <p className="max-w-2xl text-lg leading-8 text-slate-600">
-                Enreach Global supplies aluminium, copper, and brass scrap to
-                modern processors with a focus on consistency, quality
-                alignment, and commercial clarity. We operate like a long-term
-                industrial partner, not a transactional broker.
-              </p>
-              <div className="grid gap-4 sm:grid-cols-3">
-                {[
-                  ["12+", "Active trade relationships"],
-                  ["3", "Core metal categories"],
-                  ["Global", "Sourcing and buyer network"],
-                ].map(([value, label]) => (
-                  <div
-                    key={label}
-                    className="rounded-[24px] border border-slate-200/80 bg-white/85 p-5 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_50px_-34px_rgba(15,23,42,0.38)]"
-                  >
-                    <div className="text-3xl font-semibold text-slate-950">
-                      {value}
-                    </div>
-                    <div className="mt-2 text-sm leading-6 text-slate-600">
-                      {label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+        <FounderSection />
 
-            <div data-reveal className="relative">
-              <div className="absolute -left-4 -top-4 h-24 w-24 rounded-full bg-[#d8e9e3]" />
-              <div className="absolute -bottom-6 right-8 h-32 w-32 rounded-full bg-[#eadfd3]" />
-              <div className="relative h-[520px] overflow-hidden rounded-[32px] border border-white/70 shadow-[0_30px_70px_-35px_rgba(15,23,42,0.35)]">
-                <Image
-                  src="/hero2.jpg"
-                  alt="Industrial scrap handling facility supporting global metal trading"
-                  fill
-                  sizes="(min-width: 1024px) 44vw, 100vw"
-                  className="object-cover transition-transform duration-500 hover:scale-105"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
+        <TrustSection
+          whyChooseUsItems={WHY_CHOOSE_US_ITEMS}
+          companyStatistics={COMPANY_STATISTICS}
+          industryExpertise={INDUSTRY_EXPERTISE}
+          globalPresenceIndicators={GLOBAL_PRESENCE_INDICATORS}
+          serviceOfferings={SERVICE_OFFERINGS}
+          industryFocus={INDUSTRY_FOCUS}
+        />
 
         <section id="products" className="scroll-mt-28 px-5 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
@@ -880,6 +682,8 @@ export default function HomePageClient() {
             </div>
           </div>
         </section>
+
+        <CertificationsSection certifications={CERTIFICATIONS} />
 
         <section
           id="locations"
@@ -1091,22 +895,22 @@ export default function HomePageClient() {
                     <p>
                       Email:{" "}
                       <a
-                        href="mailto:info@enreachglobal.com"
+                        href={`mailto:${COMPANY_EMAIL}`}
                         className="transition-colors duration-300 hover:text-white"
                       >
-                        info@enreachglobal.com
+                        {COMPANY_EMAIL}
                       </a>
                     </p>
                     <p>
                       Phone:{" "}
                       <a
-                        href="tel:+14034087454"
+                        href={`tel:${COMPANY_PHONE.replace(/\s+/g, "")}`}
                         className="transition-colors duration-300 hover:text-white"
                       >
-                        +1 4034087454
+                        {COMPANY_PHONE}
                       </a>
                     </p>
-                    <p>Location: Canada</p>
+                    <p>Location: {COMPANY_LOCATION}</p>
                   </div>
                 </form>
               </div>

@@ -10,6 +10,7 @@ import {
   buildCanonicalUrl,
   buildImageUrl,
 } from "@/lib/site";
+import { COMPANY_LINKEDIN_URL } from "@/data/companyProfile";
 
 export function buildPageMetadata({
   title,
@@ -86,6 +87,7 @@ export function buildOrganizationSchema() {
     },
     areaServed: "Worldwide",
     knowsAbout: DEFAULT_KEYWORDS,
+    sameAs: [COMPANY_LINKEDIN_URL],
   };
 }
 
@@ -177,4 +179,59 @@ export function buildCollectionPageSchema({
       url: buildCanonicalUrl("/"),
     },
   };
+}
+
+export function buildPersonSchema({
+  name,
+  jobTitle,
+  description,
+  image,
+  sameAs = [],
+  email,
+  knowsAbout = [],
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name,
+    jobTitle,
+    description,
+    image: buildImageUrl(image),
+    sameAs,
+    email,
+    worksFor: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: buildCanonicalUrl("/"),
+    },
+    knowsAbout,
+  };
+}
+
+export function buildEmployeeSchemas(members) {
+  return members.map((member) =>
+    buildPersonSchema({
+      name: member.name,
+      jobTitle: member.designation,
+      description: `${member.designation} at ${SITE_NAME}.`,
+      image: member.image,
+      sameAs: member.linkedin ? [member.linkedin] : [],
+      knowsAbout: [member.designation, "industrial scrap trading", "global trade coordination"],
+    })
+  );
+}
+
+export function buildCertificationSchemas(certifications) {
+  return certifications.map((certification) => ({
+    "@context": "https://schema.org",
+    "@type": "EducationalOccupationalCredential",
+    name: certification.title,
+    description: certification.description,
+    url: buildCanonicalUrl("/#certifications"),
+    recognizedBy: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: buildCanonicalUrl("/"),
+    },
+  }));
 }

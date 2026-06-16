@@ -4,10 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import SearchDialog from "@/components/SearchDialog";
+import { COMPANY_LINKEDIN_URL } from "@/data/companyProfile";
+import { GLOBAL_SEARCH_ITEMS } from "@/data/searchIndex";
 
 const NAV_ITEMS = [
   { id: "home", label: "Home" },
-  { id: "about", label: "About" },
+  { id: "about", label: "Our Story" },
   { id: "products", label: "Products" },
   { id: "locations", label: "Locations" },
   { id: "blog", label: "Blog" },
@@ -117,6 +120,38 @@ function CloseIcon({ className = "" }) {
   );
 }
 
+function SearchIcon({ className = "" }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+    >
+      <path
+        d="m21 21-4.35-4.35M19 11a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function LinkedInIcon({ className = "" }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+    >
+      <path d="M6.94 8.5H3.56V20h3.38V8.5Zm-1.7-5.44A1.97 1.97 0 0 0 3.28 5c0 1.08.78 1.94 1.93 1.94h.03c1.18 0 1.94-.86 1.94-1.94A1.9 1.9 0 0 0 5.27 3.06h-.03ZM20.72 12.97c0-3.44-1.84-5.04-4.3-5.04-1.98 0-2.87 1.08-3.36 1.85V8.5H9.68c.04.86 0 11.5 0 11.5h3.38v-6.42c0-.34.02-.68.12-.92.27-.68.88-1.38 1.92-1.38 1.36 0 1.9 1.04 1.9 2.57V20h3.38v-7.03Z" />
+    </svg>
+  );
+}
+
 export default function Navbar({
   activeSection = "home",
   onNavigate,
@@ -128,6 +163,7 @@ export default function Navbar({
   const [isProductsOpen, setIsProductsOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState(PRODUCT_GROUPS[0].id);
   const [expandedMobileMenu, setExpandedMobileMenu] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const productsRef = useRef(null);
   const openTimeoutRef = useRef(null);
@@ -140,6 +176,7 @@ export default function Navbar({
   const getSectionHref = (sectionId) =>
     sectionId === "blog" ? "/blog" : sectionId === "home" ? "/" : `/#${sectionId}`;
   const getProductHref = (productId) => `/#${productId}`;
+  const searchSuggestions = GLOBAL_SEARCH_ITEMS.slice(0, 6);
 
   const clearTimer = (timerRef) => {
     if (timerRef.current) {
@@ -217,6 +254,25 @@ export default function Navbar({
     router.push(`/#${productId}`);
   };
 
+  const handleSearchItemSelect = (item) => {
+    setIsSearchOpen(false);
+    setIsMobileOpen(false);
+    setExpandedMobileMenu(false);
+    setIsProductsOpen(false);
+
+    if (item.productId && isHomePage && typeof onProductNavigate === "function") {
+      onProductNavigate(item.productId);
+      return;
+    }
+
+    if (item.sectionId && isHomePage && typeof onNavigate === "function") {
+      onNavigate(item.sectionId);
+      return;
+    }
+
+    router.push(item.href);
+  };
+
   useEffect(() => {
     return () => {
       clearTimer(openTimeoutRef);
@@ -227,7 +283,7 @@ export default function Navbar({
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 shadow-[0_20px_40px_-32px_rgba(15,23,42,0.35)] backdrop-blur-xl">
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-6 lg:px-8">
+      <div className="mx-auto flex w-full max-w-[90rem] items-center justify-between gap-3 px-5 py-5 sm:px-6 lg:px-8">
         <Link
           href="/"
           onClick={(event) => {
@@ -236,9 +292,9 @@ export default function Navbar({
               handleNavClick("home");
             }
           }}
-          className="group flex items-center gap-3 text-left text-slate-950 sm:gap-4"
+          className="group flex min-w-0 items-center gap-3 text-left text-slate-950 sm:gap-4 lg:mr-10 lg:flex-shrink-0 xl:mr-12 2xl:mr-16"
         >
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex min-w-0 items-center gap-3 sm:gap-4">
             <div className="relative h-14 w-14 flex-shrink-0 sm:h-16 sm:w-16 lg:h-20 lg:w-20">
               <Image
                 src="/logo.svg"
@@ -249,12 +305,12 @@ export default function Navbar({
               />
             </div>
 
-            <div className="min-w-0 leading-tight">
-              <p className="text-[0.62rem] tracking-[0.18em] text-gray-500 sm:text-xs sm:tracking-[0.2em]">
-                GLOBAL METAL TRADE
-              </p>
-              <p className="font-serif text-lg font-semibold transition-colors duration-300 group-hover:text-slate-700 sm:text-xl lg:text-2xl">
+            <div className="flex min-w-0 flex-col justify-center gap-0.5 leading-tight">
+              <p className="whitespace-nowrap font-serif text-lg font-semibold transition-colors duration-300 group-hover:text-slate-700 sm:text-xl lg:text-2xl">
                 Enreach Global
+              </p>
+              <p className="whitespace-nowrap text-[0.58rem] tracking-[0.14em] text-gray-500 sm:text-xs sm:tracking-[0.2em]">
+                GLOBAL METAL TRADE
               </p>
             </div>
           </div>
@@ -426,21 +482,50 @@ export default function Navbar({
           >
             Get In Touch
           </Link>
+
+          <button
+            type="button"
+            aria-label="Open site search"
+            onClick={() => setIsSearchOpen(true)}
+            className="rounded-full border border-slate-200 bg-white p-3 text-slate-900 transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-50"
+          >
+            <SearchIcon className="h-5 w-5" />
+          </button>
+
+          <a
+            href={COMPANY_LINKEDIN_URL}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Visit Enreach Global on LinkedIn"
+            className="rounded-full border border-slate-200 bg-white p-3 text-slate-900 transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-50"
+          >
+            <LinkedInIcon className="h-5 w-5" />
+          </a>
         </nav>
 
-        <button
-          type="button"
-          aria-label="Toggle navigation"
-          aria-expanded={isMobileOpen}
-          className="rounded-full border border-slate-200 p-3 text-slate-900 lg:hidden"
-          onClick={() => setIsMobileOpen((current) => !current)}
-        >
-          {isMobileOpen ? (
-            <CloseIcon className="h-5 w-5" />
-          ) : (
-            <MenuIcon className="h-5 w-5" />
-          )}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <button
+            type="button"
+            aria-label="Open site search"
+            onClick={() => setIsSearchOpen(true)}
+            className="rounded-full border border-slate-200 p-3 text-slate-900"
+          >
+            <SearchIcon className="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            aria-label="Toggle navigation"
+            aria-expanded={isMobileOpen}
+            className="rounded-full border border-slate-200 p-3 text-slate-900"
+            onClick={() => setIsMobileOpen((current) => !current)}
+          >
+            {isMobileOpen ? (
+              <CloseIcon className="h-5 w-5" />
+            ) : (
+              <MenuIcon className="h-5 w-5" />
+            )}
+          </button>
+        </div>
       </div>
 
       <div
@@ -537,6 +622,17 @@ export default function Navbar({
             );
           })}
 
+          <a
+            href={COMPANY_LINKEDIN_URL}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Visit Enreach Global on LinkedIn"
+            className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-900 transition-colors duration-300 hover:bg-slate-100"
+          >
+            <LinkedInIcon className="h-4 w-4" />
+            LinkedIn
+          </a>
+
           <button
             type="button"
             onClick={() => handleNavClick("contact")}
@@ -546,6 +642,14 @@ export default function Navbar({
           </button>
         </nav>
       </div>
+
+      <SearchDialog
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        onSelect={handleSearchItemSelect}
+        items={GLOBAL_SEARCH_ITEMS}
+        suggestions={searchSuggestions}
+      />
     </header>
   );
 }

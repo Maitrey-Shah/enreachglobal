@@ -1,7 +1,13 @@
 import HomePageClient from "@/components/HomePageClient";
 import {
+  CERTIFICATIONS,
+  FOUNDERS,
+} from "@/data/companyProfile";
+import {
+  buildCertificationSchemas,
   buildLocalBusinessSchema,
   buildPageMetadata,
+  buildPersonSchema,
   buildWebPageSchema,
 } from "@/lib/seo";
 
@@ -29,12 +35,23 @@ export const metadata = buildPageMetadata({
 export default function HomePage() {
   const structuredData = [
     buildLocalBusinessSchema(),
+    ...FOUNDERS.map((founder) =>
+      buildPersonSchema({
+        name: founder.name,
+        jobTitle: founder.designation,
+        description: founder.story,
+        sameAs: [founder.linkedin],
+        email: founder.email.replace("mailto:", ""),
+        knowsAbout: founder.expertise,
+      })
+    ),
     buildWebPageSchema({
       title: homeTitle,
       description: homeDescription,
       path: "/",
       keywords: homeKeywords,
     }),
+    ...buildCertificationSchemas(CERTIFICATIONS),
   ];
 
   return (
