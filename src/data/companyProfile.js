@@ -65,34 +65,3 @@ export const TEAM_MEMBERS = [
     linkedin: COMPANY_LINKEDIN_URL,
   },
 ];
-
-export const CERTIFICATIONS = [
-  {
-    id: "iso-certification-placeholder",
-    title: "ISO Certification Placeholder",
-    image: "/hero2.jpg",
-    description:
-      "Reserved for the client-provided ISO certification or equivalent quality management credential.",
-  },
-  {
-    id: "export-compliance-placeholder",
-    title: "Export Certification Placeholder",
-    image: "/hero3.jpg",
-    description:
-      "Reserved for the client-provided export compliance, registration, or documentation credential.",
-  },
-  {
-    id: "industry-membership-placeholder",
-    title: "Industry Membership Placeholder",
-    image: "/hero1.png",
-    description:
-      "Reserved for approved industry membership badges, association credentials, or trade body recognition.",
-  },
-  {
-    id: "quality-standards-placeholder",
-    title: "Quality Standards Placeholder",
-    image: "/logo.svg",
-    description:
-      "Reserved for government registrations, grading standards, or client-approved compliance documentation.",
-  },
-];

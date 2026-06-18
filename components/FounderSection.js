@@ -1,5 +1,8 @@
 "use client";
 
+import Image from "next/image";
+import { useState } from "react";
+
 const ABOUT_PARAGRAPHS = [
   "Founded in 2023, Enreach Global Inc. is a Canadian incorporated scrap metal trading company headquartered in Calgary, Alberta. We specialize in the sourcing, purchasing, and international export of high-quality scrap metals, serving suppliers, recyclers, manufacturers, and buyers across global markets.",
   "At Enreach Global, we are committed to creating efficient and profitable trading partnerships throughout the metal recycling industry. We purchase container-load quantities of ferrous and non-ferrous scrap metals from a wide range of suppliers, including scrap yards, industrial manufacturers, demolition contractors, metal recyclers, government auctions, independent scrap dealers, and traders.",
@@ -65,6 +68,10 @@ const FOUNDERS = [
   {
     name: "Kishan Hirpara",
     role: "Founder",
+    image: "/assets/founders/kishan-hirpara.jpeg",
+    imagePosition: "center center",
+    description:
+      "Kishan Hirpara brings a strong technical foundation and strategic mindset to Enreach Global, with experience across metal recycling, logistics, and international trade. His leadership focuses on transparent supplier relationships, disciplined operations, and long-term value creation for global buyers.",
     paragraphs: [
       "Kishan Hirpara is a Founder of Enreach Global Inc., bringing a strong technical foundation and strategic mindset to the organization.",
       "He holds a Master's degree in Chemical Engineering from the University of Calgary and has over five years of professional experience in metal recycling, logistics, and international trade. His background provides deep insight into industrial materials, resource efficiency, and global supply chain operations.",
@@ -76,6 +83,10 @@ const FOUNDERS = [
   {
     name: "Biraj Gajera",
     role: "Founder",
+    image: "/assets/founders/biraj-gajera.jpeg",
+    imagePosition: "center center",
+    description:
+      "Biraj Gajera brings deep commercial experience in sales, operations, and business development. He leads with a practical, relationship-first approach, helping expand supplier networks, strengthen trade execution, and build trusted international partnerships.",
     paragraphs: [
       "Biraj Gajera is a Founder of Enreach Global Inc. and brings over seven years of experience in sales, operations, and business development.",
       "He holds a Bachelor's degree in Information Systems and Business Management from SAIT (Southern Alberta Institute of Technology), giving him a strong foundation in both technical understanding and business strategy.",
@@ -90,6 +101,9 @@ const FOUNDERS = [
 
 const cardClassName =
   "border border-slate-200/80 bg-white/85 shadow-[0_30px_70px_-40px_rgba(15,23,42,0.3)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_34px_80px_-38px_rgba(15,23,42,0.36)]";
+
+const founderCardClassName =
+  "group relative flex h-full flex-col items-center overflow-hidden rounded-[24px] border border-[rgba(0,0,0,0.08)] bg-white px-6 pb-8 pt-8 text-center shadow-[0_15px_40px_rgba(0,0,0,0.08)] transition-all duration-500 hover:-translate-y-2 hover:border-slate-300/80 hover:bg-white/90 hover:shadow-[0_24px_60px_rgba(15,23,42,0.14)] hover:backdrop-blur-xl sm:px-8 sm:pb-10 sm:pt-10 lg:px-10";
 
 function SectionHeading({ badge, title, description }) {
   return (
@@ -107,56 +121,113 @@ function SectionHeading({ badge, title, description }) {
   );
 }
 
+function LinkedInIcon({ className = "" }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+    >
+      <path d="M6.94 8.98H3.75v10.27h3.19V8.98ZM5.35 7.58a1.84 1.84 0 1 0 0-3.68 1.84 1.84 0 0 0 0 3.68Zm13.9 6.03c0-3.1-1.65-4.54-3.86-4.54a3.33 3.33 0 0 0-3 1.65h-.04V8.98H9.3v10.27h3.18v-5.08c0-1.34.25-2.64 1.91-2.64 1.64 0 1.66 1.54 1.66 2.73v4.99h3.19v-5.64Z" />
+    </svg>
+  );
+}
+
+function FounderPortrait({ founder }) {
+  const [hasImageError, setHasImageError] = useState(false);
+  const initials = founder.name
+    .split(" ")
+    .map((part) => part[0])
+    .join("");
+
+  return (
+    <div className="relative mx-auto h-[188px] w-[188px] overflow-hidden rounded-full border-[6px] border-white bg-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.15)] sm:h-[220px] sm:w-[220px]">
+      {hasImageError ? (
+        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 via-white to-slate-200 text-5xl font-semibold text-slate-400">
+          {initials}
+        </div>
+      ) : (
+        <Image
+          src={founder.image}
+          alt={`${founder.name}, ${founder.role} of Enreach Global Inc.`}
+          fill
+          sizes="(min-width: 640px) 220px, 188px"
+          quality={95}
+          className="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
+          style={{ objectPosition: founder.imagePosition }}
+          onError={() => setHasImageError(true)}
+        />
+      )}
+    </div>
+  );
+}
+
 export default function FounderSection() {
   return (
     <div id="about" className="scroll-mt-28">
-      <section id="founder" className="scroll-mt-28 px-5 pb-20 pt-20 sm:px-6 lg:px-8">
+      <section
+        id="founder"
+        className="scroll-mt-28 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] px-5 pb-20 pt-20 sm:px-6 lg:px-8"
+      >
         <div className="mx-auto max-w-7xl">
-          <SectionHeading
-            badge="Founders"
-            title="Meet Our Founders"
-            description={
-              <>
-                <span className="block">
-                  At Enreach Global Inc., our leadership is built on industry
-                  expertise, transparency, reliability, and long-term
-                  partnerships.
-                </span>
-                <span className="mt-4 block">
-                  Founded with a shared vision to create a trusted global scrap
-                  metal trading company, our founders combine technical
-                  knowledge, operational excellence, and business expertise to
-                  deliver value-driven solutions across international markets.
-                </span>
-              </>
-            }
-          />
+          <div data-reveal className="mx-auto max-w-4xl text-center">
+            <p className="mx-auto inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.26em] text-slate-500 shadow-sm">
+              Leadership Team
+            </p>
+            <h2 className="mt-5 text-4xl leading-tight font-semibold text-slate-950 md:text-5xl">
+              Meet Our Founders
+            </h2>
+            <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-slate-600">
+              Driving Global Growth Through Trust, Innovation &amp; Industry
+              Expertise
+            </p>
+          </div>
 
-          <div className="mt-10 grid gap-7 md:grid-cols-2">
-            {FOUNDERS.map((founder) => (
+          <div className="mt-12 grid gap-8 md:grid-cols-2 lg:gap-10">
+            {FOUNDERS.map((founder, index) => (
               <article
                 key={founder.name}
-                className={`flex h-full flex-col rounded-[32px] p-7 sm:p-9 lg:p-10 ${cardClassName}`}
+                data-reveal
+                className={founderCardClassName}
               >
-                <h3 className="text-3xl font-semibold text-slate-950 sm:text-4xl">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent"
+                />
+                <p className="mb-6 text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
+                  Founder 0{index + 1}
+                </p>
+                <FounderPortrait founder={founder} />
+                <div className="mt-8 h-px w-24 bg-gradient-to-r from-transparent via-[#b8a46a] to-transparent" />
+                <h3 className="mt-5 text-3xl font-semibold text-slate-950 sm:text-4xl">
                   {founder.name}
                 </h3>
-                <p className="mt-3 text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
+                <p className="mt-3 text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">
                   {founder.role}
                 </p>
-                <div className="mt-7 flex-1 space-y-5 border-t border-slate-200/80 pt-6">
-                  {founder.paragraphs.map((paragraph) => (
-                    <p key={paragraph} className="text-base leading-8 text-slate-600">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
+                <p className="mt-6 flex-1 text-base leading-8 text-slate-600">
+                  {founder.description}
+                </p>
+                {founder.linkedin ? (
+                  <a
+                    href={founder.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-7 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-950 hover:text-white"
+                    aria-label={`Connect with ${founder.name} on LinkedIn`}
+                  >
+                    <LinkedInIcon className="h-5 w-5" />
+                    LinkedIn
+                  </a>
+                ) : null}
               </article>
             ))}
           </div>
 
           <article
-            className={`mt-7 rounded-[32px] p-7 sm:p-9 lg:p-10 ${cardClassName}`}
+            data-reveal
+            className="mt-8 overflow-hidden rounded-[24px] border border-[rgba(0,0,0,0.08)] bg-white/90 p-7 shadow-[0_15px_40px_rgba(0,0,0,0.08)] backdrop-blur-sm sm:p-9 lg:p-10"
           >
             <h3 className="text-3xl font-semibold text-slate-950">
               Our Shared Vision
@@ -178,6 +249,7 @@ export default function FounderSection() {
           </article>
 
           <blockquote
+            data-reveal
             className="mt-7 rounded-[36px] bg-slate-950 px-7 py-10 text-white shadow-[0_40px_90px_-42px_rgba(15,23,42,0.65)] sm:px-10 sm:py-12 lg:px-14 lg:py-14"
           >
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/55">

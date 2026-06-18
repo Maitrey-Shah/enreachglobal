@@ -5,14 +5,12 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import CertificationsSection from "@/components/CertificationsSection";
 import Footer from "@/components/Footer";
 import FounderSection from "@/components/FounderSection";
 import MapCard from "@/components/MapCard";
 import Navbar from "@/components/Navbar";
 import TrustSection from "@/components/TrustSection";
 import WhatsAppButton from "@/components/WhatsAppButton";
-import { CERTIFICATIONS } from "@/data/companyProfile";
 import {
   COMPANY_STATISTICS,
   CONTACT_FEATURES,
@@ -682,8 +680,6 @@ export default function HomePageClient() {
             </div>
           </div>
         </section>
-
-        <CertificationsSection certifications={CERTIFICATIONS} />
 
         <section
           id="locations"

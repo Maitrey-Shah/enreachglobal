@@ -220,18 +220,3 @@ export function buildEmployeeSchemas(members) {
     })
   );
 }
-
-export function buildCertificationSchemas(certifications) {
-  return certifications.map((certification) => ({
-    "@context": "https://schema.org",
-    "@type": "EducationalOccupationalCredential",
-    name: certification.title,
-    description: certification.description,
-    url: buildCanonicalUrl("/#certifications"),
-    recognizedBy: {
-      "@type": "Organization",
-      name: SITE_NAME,
-      url: buildCanonicalUrl("/"),
-    },
-  }));
-}

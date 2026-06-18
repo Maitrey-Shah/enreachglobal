@@ -1,10 +1,6 @@
 import HomePageClient from "@/components/HomePageClient";
+import { FOUNDERS } from "@/data/companyProfile";
 import {
-  CERTIFICATIONS,
-  FOUNDERS,
-} from "@/data/companyProfile";
-import {
-  buildCertificationSchemas,
   buildLocalBusinessSchema,
   buildPageMetadata,
   buildPersonSchema,
@@ -51,7 +47,6 @@ export default function HomePage() {
       path: "/",
       keywords: homeKeywords,
     }),
-    ...buildCertificationSchemas(CERTIFICATIONS),
   ];
 
   return (

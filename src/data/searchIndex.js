@@ -1,8 +1,5 @@
 import { getAllBlogPosts } from "@/data/blogPosts";
-import {
-  CERTIFICATIONS,
-  FOUNDERS,
-} from "@/data/companyProfile";
+import { FOUNDERS } from "@/data/companyProfile";
 import {
   INDUSTRY_FOCUS,
   PRODUCT_DETAILS,
@@ -85,16 +82,6 @@ const founderItem = {
   ],
 };
 
-const certificationItem = {
-  id: "page-certifications",
-  type: "Certification",
-  title: "Certifications & Compliance",
-  description: "Certification placeholders and compliance credentials for client approval.",
-  href: "/#certifications",
-  sectionId: "certifications",
-  keywords: ["certifications", "compliance", "quality standards", "industry memberships"],
-};
-
 const trustItem = {
   id: "page-trust",
   type: "Service",
@@ -108,7 +95,6 @@ const trustItem = {
 export const GLOBAL_SEARCH_ITEMS = [
   ...PAGE_ITEMS,
   founderItem,
-  certificationItem,
   trustItem,
   ...SERVICE_OFFERINGS.map((service) => ({
     id: `service-${service.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
@@ -154,15 +140,6 @@ export const GLOBAL_SEARCH_ITEMS = [
     href: "/#founder",
     sectionId: "founder",
     keywords: [founder.name, founder.designation, "founder", "leadership"],
-  })),
-  ...CERTIFICATIONS.map((certification) => ({
-    id: `certification-${certification.id}`,
-    type: "Certification",
-    title: certification.title,
-    description: certification.description,
-    href: "/#certifications",
-    sectionId: "certifications",
-    keywords: [certification.title, certification.description, "compliance"],
   })),
   ...getAllBlogPosts().map((post) => ({
     id: `blog-${post.slug}`,
