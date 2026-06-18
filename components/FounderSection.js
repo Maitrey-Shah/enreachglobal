@@ -3,17 +3,6 @@
 import Image from "next/image";
 import { useState } from "react";
 
-const ABOUT_PARAGRAPHS = [
-  "Founded in 2023, Enreach Global Inc. is a Canadian incorporated scrap metal trading company headquartered in Calgary, Alberta. We specialize in the sourcing, purchasing, and international export of high-quality scrap metals, serving suppliers, recyclers, manufacturers, and buyers across global markets.",
-  "At Enreach Global, we are committed to creating efficient and profitable trading partnerships throughout the metal recycling industry. We purchase container-load quantities of ferrous and non-ferrous scrap metals from a wide range of suppliers, including scrap yards, industrial manufacturers, demolition contractors, metal recyclers, government auctions, independent scrap dealers, and traders.",
-  "Our product portfolio includes HMS 1 & 2, steel scrap, aluminum, copper, brass, stainless steel, catalytic converters, e-scrap, and other recyclable metal materials. Through our extensive sourcing network and strong international relationships, we supply quality scrap materials to customers across South Asian and other international markets.",
-  "What sets Enreach Global apart is our commitment to providing highly competitive pricing, advance payment options, and dependable service. We understand that suppliers value security, speed, and transparency. That's why we focus on building long-term relationships based on trust, ethical business practices, and consistent performance.",
-  "Our experienced team works closely with suppliers and buyers to ensure smooth transactions, reliable logistics, and timely delivery from origin to destination.",
-  "As a growing company in the global recycling industry, we recognize the importance of sustainable resource management. By facilitating the recovery, recycling, and responsible movement of valuable metal resources, we contribute to a more sustainable and circular economy while helping businesses maximize the value of their recyclable materials.",
-  "Our vision is to become one of the most trusted and respected scrap metal trading companies in the industry, earning a strong market presence through exceptional service, ethical business practices, and long-term partnerships.",
-  "With a dedicated team, a growing global network, and a customer-first approach, Enreach Global Inc. is committed to connecting suppliers and buyers through reliable, transparent, and value-driven scrap metal trading solutions.",
-];
-
 const PURPOSE_CARDS = [
   {
     title: "Our Mission",
@@ -62,6 +51,30 @@ const CORE_VALUES = [
     title: "Growth Through Partnership",
     text: "We believe lasting success is built through mutually beneficial relationships that create value for all stakeholders.",
   },
+];
+
+const STORY_HIGHLIGHTS = [
+  {
+    label: "Journey",
+    title: "Canadian roots, global reach",
+    text: "Founded in Calgary in 2023, Enreach Global was built to connect reliable scrap metal supply with international industrial demand.",
+  },
+  {
+    label: "Purpose",
+    title: "Create trusted trade flow",
+    text: "We simplify sourcing, purchasing, export coordination, and relationship management so partners can trade with confidence.",
+  },
+  {
+    label: "Values",
+    title: "Integrity before volume",
+    text: "Transparency, reliability, professionalism, and sustainable resource recovery guide every supplier and buyer relationship.",
+  },
+];
+
+const STORY_TIMELINE = [
+  ["2023", "Incorporated in Calgary, Alberta with a focused mandate for global scrap metal trading."],
+  ["Today", "Serving suppliers, recyclers, manufacturers, traders, and international buyers with disciplined execution."],
+  ["Next", "Building a respected global brand known for ethical trade, quality sourcing, and long-term partnerships."],
 ];
 
 const FOUNDERS = [
@@ -166,14 +179,101 @@ function FounderPortrait({ founder }) {
 export default function FounderSection() {
   return (
     <div id="about" className="scroll-mt-28">
+      <section className="px-5 py-20 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
+            <div data-reveal>
+              <SectionHeading
+                badge="Our Story"
+                title="About Enreach Global Inc."
+                description="A Canadian metal trading company built to connect dependable scrap supply with global industrial opportunity through trust, clarity, and disciplined execution."
+              />
+              <div className="mt-8 space-y-5 text-base leading-8 text-slate-600 lg:text-[1.05rem]">
+                <p>
+                  Enreach Global Inc. was founded in 2023 in Calgary, Alberta
+                  with a clear purpose: to make international scrap metal trade
+                  more transparent, reliable, and commercially valuable for
+                  every partner in the supply chain.
+                </p>
+                <p>
+                  We source, purchase, and export ferrous and non-ferrous scrap
+                  metals for suppliers, recyclers, manufacturers, demolition
+                  contractors, independent dealers, traders, and global buyers.
+                  Our mission is to create efficient trading partnerships backed
+                  by competitive pricing, advance payment options, dependable
+                  logistics, and responsive communication.
+                </p>
+                <p>
+                  Our vision is to become a trusted name in the global recycling
+                  and commodities market by combining ethical business
+                  practices, sustainable resource recovery, strong execution,
+                  and long-term relationship building.
+                </p>
+              </div>
+            </div>
+
+            <div data-reveal className={`overflow-hidden rounded-[32px] ${cardClassName}`}>
+              <div className="grid gap-0 lg:grid-cols-[0.95fr_1.05fr]">
+                <div className="bg-slate-950 p-7 text-white sm:p-9">
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/55">
+                    Company Journey
+                  </p>
+                  <div className="mt-7 space-y-7">
+                    {STORY_TIMELINE.map(([year, text]) => (
+                      <div key={year} className="relative pl-7">
+                        <span
+                          aria-hidden="true"
+                          className="absolute left-0 top-2 h-3 w-3 rounded-full bg-white shadow-[0_0_0_6px_rgba(255,255,255,0.12)]"
+                        />
+                        <p className="font-serif text-2xl font-semibold">
+                          {year}
+                        </p>
+                        <p className="mt-2 text-sm leading-6 text-white/68">
+                          {text}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid gap-4 bg-white p-6 sm:p-7">
+                  {STORY_HIGHLIGHTS.map((item) => (
+                    <article
+                      key={item.label}
+                      className="rounded-[22px] border border-slate-200/80 bg-[#f8fafc] p-5 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_20px_45px_-32px_rgba(15,23,42,0.35)]"
+                    >
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
+                        {item.label}
+                      </p>
+                      <h3 className="mt-3 text-xl font-semibold text-slate-950">
+                        {item.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-6 text-slate-600">
+                        {item.text}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              </div>
+              <div className="border-t border-slate-200/80 bg-white px-7 py-7 text-center sm:px-10">
+                <p className="font-serif text-xl leading-8 font-semibold text-slate-950 sm:text-2xl">
+                  Enreach Global Inc. - Connecting Metal Resources with Global
+                  Opportunities.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section
         id="founder"
-        className="scroll-mt-28 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] px-5 pb-20 pt-20 sm:px-6 lg:px-8"
+        className="scroll-mt-28 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)] px-5 py-20 sm:px-6 lg:px-8"
       >
         <div className="mx-auto max-w-7xl">
           <div data-reveal className="mx-auto max-w-4xl text-center">
             <p className="mx-auto inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.26em] text-slate-500 shadow-sm">
-              Leadership Team
+              Founder Message
             </p>
             <h2 className="mt-5 text-4xl leading-tight font-semibold text-slate-950 md:text-5xl">
               Meet Our Founders
@@ -264,31 +364,6 @@ export default function FounderSection() {
               Founders, Enreach Global Inc.
             </footer>
           </blockquote>
-        </div>
-      </section>
-
-      <section className="px-5 py-20 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <SectionHeading badge="Our Story" title="About Enreach Global Inc." />
-
-          <article className={`mt-10 overflow-hidden rounded-[36px] ${cardClassName}`}>
-            <div className="grid gap-x-12 gap-y-6 px-7 py-9 sm:px-10 sm:py-12 lg:grid-cols-2 lg:px-14 lg:py-14">
-              {ABOUT_PARAGRAPHS.map((paragraph) => (
-                <p
-                  key={paragraph}
-                  className="text-base leading-8 text-slate-600 lg:text-[1.05rem]"
-                >
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-            <div className="border-t border-slate-200/80 bg-slate-950 px-7 py-7 text-center sm:px-10">
-              <p className="font-serif text-xl leading-8 font-semibold text-white sm:text-2xl">
-                Enreach Global Inc. - Connecting Metal Resources with Global
-                Opportunities.
-              </p>
-            </div>
-          </article>
         </div>
       </section>
 
